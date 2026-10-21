@@ -76,12 +76,15 @@
         const url = "https://drive.google.com/thumbnail?id=" +
               encodeURIComponent(synthese.id) + "&sz=w3200";
 
-    apercu.onload = () => {
+   apercu.onload = () => {
     apercu.style.display = "block";
-    resultat.textContent += "\n\n✅ Image de synthèse affichée !";
-  };
+    resultat.textContent +=
+    "\n\n✅ Image de synthèse affichée !" +
+    "\nRésolution reçue : " +
+    apercu.naturalWidth + " × " +
+    apercu.naturalHeight + " pixels";
 
-  apercu.onerror = () => {
+    apercu.onerror = () => {
     resultat.textContent += "\n\n❌ Impossible d'afficher l'image.";
   };
 
