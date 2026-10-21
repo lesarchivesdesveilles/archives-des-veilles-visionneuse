@@ -217,18 +217,42 @@ button:disabled {
 }
 
 /* Plein écran */
-.viewer:fullscreen {
-  background: #171119;
-  max-width: none;
-  display: flex;
-  flex-direction: column;
+const fullscreenButton = document.getElementById("fullscreen");
+
+function updateFullscreenButton() {
+  const isFullscreen = document.fullscreenElement === viewer;
+
+  fullscreenButton.textContent = isFullscreen ? "⛶" : "⛶";
+  fullscreenButton.title = isFullscreen
+    ? "Quitter le plein écran"
+    : "Passer en plein écran";
+
+  fullscreenButton.setAttribute(
+    "aria-label",
+    fullscreenButton.title
+  );
 }
 
-.viewer:fullscreen .stage {
-  flex: 1;
-  min-height: 0;
-  height: auto;
-}
+fullscreenButton.onclick = async () => {
+  try {
+    if (document.fullscreenElement) {
+      await document.exitFullscreen();
+    } else {
+      await viewer.requestFullscreen();
+    }
+  } catch (error) {
+    alert(
+      "Le plein écran n'est pas disponible dans cet affichage."
+    );
+  }
+};
+
+document.addEventListener(
+  "fullscreenchange",
+  updateFullscreenButton
+);
+
+updateFullscreenButton();
 
 /* Adaptation mobile */
 @media (max-width: 600px) {
