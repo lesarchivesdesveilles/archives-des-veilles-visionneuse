@@ -24,27 +24,40 @@ body {
   padding: 14px;
 }
 
+/* En-tête */
 .heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
+  text-align: center;
+  padding: 14px 10px 12px;
   margin-bottom: 12px;
+  background: #1e1520;
+  border-radius: 10px;
 }
 
 .heading h1 {
   margin: 0;
-  font-size: clamp(14px, 2.8vw, 19px);
-  color: #e8bb7e;
+  color: #e6b3d6;
+  font-size: clamp(15px, 2.7vw, 20px);
   font-weight: normal;
 }
 
-.heading .brand {
-  color: #c5b6be;
-  font: 11px Arial, sans-serif;
-  white-space: nowrap;
+.heading .separator {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    #94704e,
+    transparent
+  );
+  margin: 13px 0 10px;
 }
 
+.heading .signature {
+  margin: 0;
+  color: #f5e5cb;
+  font-size: 11px;
+}
+
+/* Zone de lecture */
 .stage {
   height: min(75vh, 750px);
   min-height: 320px;
@@ -101,17 +114,20 @@ body {
   display: none;
 }
 
+/* Commandes sur deux rangées */
 .controls {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 7px;
+  justify-content: center;
+  gap: 9px;
   margin-top: 11px;
 }
 
 .control-row {
   display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
   justify-content: center;
   align-items: center;
   gap: 9px;
@@ -119,17 +135,14 @@ body {
 }
 
 .control-row button {
+  flex: 0 0 42px;
   width: 42px;
   height: 42px;
+  min-width: 0;
   padding: 0;
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
-}
-
-.controls {
-  flex-direction: column;
-  gap: 9px;
 }
 
 button {
@@ -137,18 +150,15 @@ button {
   color: #f5e5cb;
   border: 1px solid #94704e;
   border-radius: 7px;
-  padding: 9px 12px;
   cursor: pointer;
   font: 14px Arial, sans-serif;
-  min-width: 39px;
 }
 
 button:hover {
   background: #51384a;
 }
 
-button:focus-visible,
-.thumb:focus-visible {
+button:focus-visible {
   outline: 2px solid #e8bb7e;
   outline-offset: 2px;
 }
@@ -164,13 +174,14 @@ button:disabled {
   font: 13px Arial, sans-serif;
 }
 
+/* Miniatures */
 .thumbnails {
   display: flex;
   gap: 7px;
   overflow-x: auto;
   padding: 12px 2px 5px;
   scrollbar-width: thin;
-  justify-content: safe center;
+  justify-content: flex-start;
 }
 
 .thumb {
@@ -204,6 +215,7 @@ button:disabled {
   font: 11px Arial, sans-serif;
 }
 
+/* Plein écran */
 .viewer:fullscreen {
   background: #171119;
   max-width: none;
@@ -217,6 +229,7 @@ button:disabled {
   height: auto;
 }
 
+/* Adaptation mobile */
 @media (max-width: 600px) {
   .viewer {
     padding: 8px;
@@ -227,12 +240,18 @@ button:disabled {
     min-height: 260px;
   }
 
-  .heading .brand {
-    display: none;
+  .heading {
+    padding: 12px 8px;
   }
 
-  button {
-    padding: 9px;
+  .heading h1 {
+    font-size: 16px;
+  }
+
+  .control-row button {
+    flex-basis: 40px;
+    width: 40px;
+    height: 40px;
   }
 
   .thumb {
@@ -247,10 +266,11 @@ button:disabled {
 
 <main class="viewer" id="viewer">
 
-  <div class="heading">
-    <h1>✦ Visionneuse interactive — Les Archives des Veilles</h1>
-    <span class="brand">LADV</span>
-  </div>
+  <header class="heading">
+    <h1>☽ Visionneuse interactive ☾</h1>
+    <div class="separator"></div>
+    <p class="signature">Les Archives des Veilles</p>
+  </header>
 
   <div class="stage" id="stage"
        aria-label="Infographie, zoom et navigation tactile">
@@ -271,30 +291,31 @@ button:disabled {
 
   <nav class="controls" aria-label="Commandes de la visionneuse">
 
-  <div class="control-row">
-    <button id="prev" title="Précédente"
-            aria-label="Image précédente">❮</button>
+    <div class="control-row">
+      <button id="prev" title="Précédente"
+              aria-label="Image précédente">❮</button>
 
-    <span id="counter" aria-live="polite">— / —</span>
+      <span id="counter" aria-live="polite">— / —</span>
 
-    <button id="next" title="Suivante"
-            aria-label="Image suivante">❯</button>
-  </div>
+      <button id="next" title="Suivante"
+              aria-label="Image suivante">❯</button>
+    </div>
 
-  <div class="control-row">
-    <button id="minus" title="Dézoomer"
-            aria-label="Dézoomer">−</button>
+    <div class="control-row">
+      <button id="minus" title="Dézoomer"
+              aria-label="Dézoomer">−</button>
 
-    <button id="plus" title="Zoomer"
-            aria-label="Zoomer">+</button>
+      <button id="plus" title="Zoomer"
+              aria-label="Zoomer">+</button>
 
-    <button id="reset" title="Réinitialiser le zoom"
-            aria-label="Réinitialiser le zoom">↺</button>
+      <button id="reset" title="Réinitialiser le zoom"
+              aria-label="Réinitialiser le zoom">↺</button>
 
-    <button id="fullscreen" title="Plein écran"
-            aria-label="Plein écran">⛶</button>
-  </div>
-</nav>
+      <button id="fullscreen" title="Plein écran"
+              aria-label="Plein écran">⛶</button>
+    </div>
+
+  </nav>
 
   <div class="thumbnails" id="thumbnails"
        aria-label="Miniatures des infographies"></div>
@@ -307,12 +328,11 @@ button:disabled {
 
 <script>
 
-// Dossier Google Drive « Publication » du Livre d'Énoch
+// Dossier Google Drive actuellement utilisé pour le test
 const DOSSIER_DRIVE = "1QioBxBkKRLPrbMLn2xqJhfcbVw_fuhsZ";
 
-// Utiliser uniquement une clé restreinte à Google Drive API
-// et au domaine GitHub Pages.
-const CLE_API = "AIzaSyCHfj7qDdgbXlpfDcWatMa8RwvgLb_EDx4";
+// Clé API restreinte à Google Drive API et GitHub Pages
+const CLE_API = "REMPLACER_PAR_TA_CLE_API";
 
 const stage = document.getElementById("stage");
 const artwork = document.getElementById("artwork");
@@ -334,19 +354,16 @@ let swipeStartX = null;
 let swipeStartY = null;
 let swipePossible = false;
 
-// Adresse de l'image Google Drive
 function imageUrl(id) {
   return "https://drive.google.com/thumbnail?id=" +
     encodeURIComponent(id) + "&sz=w3200";
 }
 
-// Messages de chargement
 function setStatus(message) {
   statusElement.textContent = message;
   statusElement.hidden = !message;
 }
 
-// Déplacement et zoom
 function applyTransform() {
   artwork.style.transform =
     `translate(${x}px, ${y}px) scale(${scale})`;
@@ -370,7 +387,6 @@ function zoom(factor) {
   applyTransform();
 }
 
-// Affichage d'une planche
 function render() {
   if (!pages.length) return;
 
@@ -407,7 +423,6 @@ function render() {
   });
 }
 
-// Miniatures cliquables
 function buildThumbnails() {
   thumbnailsElement.replaceChildren();
 
@@ -444,7 +459,6 @@ function buildThumbnails() {
   });
 }
 
-// Récupération automatique des images
 async function loadPages() {
 
   if (CLE_API.startsWith("REMPLACER_")) {
@@ -491,7 +505,6 @@ async function loadPages() {
 
     } while (token);
 
-    // Tri automatique : 00, 01, 02...
     pages.sort((a, b) =>
       a.name.localeCompare(b.name, "fr", { numeric: true })
     );
@@ -513,7 +526,7 @@ async function loadPages() {
   }
 }
 
-// Boutons de navigation
+// Navigation
 document.getElementById("prev").onclick = () => {
   if (index > 0) {
     index--;
@@ -528,14 +541,13 @@ document.getElementById("next").onclick = () => {
   }
 };
 
-// Boutons de zoom
+// Zoom
 document.getElementById("plus").onclick = () => zoom(1.4);
 document.getElementById("minus").onclick = () => zoom(1 / 1.4);
 document.getElementById("reset").onclick = resetZoom;
 
 // Plein écran
 document.getElementById("fullscreen").onclick = () => {
-
   if (document.fullscreenElement) {
     document.exitFullscreen();
   } else if (viewer.requestFullscreen) {
@@ -546,16 +558,14 @@ document.getElementById("fullscreen").onclick = () => {
       );
     });
   }
-
 };
 
-// Zoom à la molette
+// Molette
 stage.addEventListener("wheel", event => {
   event.preventDefault();
   zoom(event.deltaY < 0 ? 1.15 : 1 / 1.15);
 }, { passive: false });
 
-// Calcul de la distance entre deux doigts
 function distance(a, b) {
   return Math.hypot(
     a.clientX - b.clientX,
@@ -570,9 +580,8 @@ function center(a, b) {
   };
 }
 
-// Début du toucher
+// Gestes tactiles
 stage.addEventListener("pointerdown", event => {
-
   stage.setPointerCapture(event.pointerId);
   pointers.set(event.pointerId, event);
 
@@ -591,12 +600,9 @@ stage.addEventListener("pointerdown", event => {
     previousDistance = distance(a, b);
     previousCenter = center(a, b);
   }
-
 });
 
-// Déplacement tactile
 stage.addEventListener("pointermove", event => {
-
   if (!pointers.has(event.pointerId)) return;
 
   const old = pointers.get(event.pointerId);
@@ -608,19 +614,14 @@ stage.addEventListener("pointermove", event => {
   }
 
   if (pointers.size === 2) {
-
     const [a, b] = [...pointers.values()];
-
     const newDistance = distance(a, b);
     const newCenter = center(a, b);
 
     if (previousDistance) {
       scale = Math.max(
         1,
-        Math.min(
-          8,
-          scale * newDistance / previousDistance
-        )
+        Math.min(8, scale * newDistance / previousDistance)
       );
     }
 
@@ -639,19 +640,15 @@ stage.addEventListener("pointermove", event => {
   }
 
   applyTransform();
-
 });
 
-// Fin du toucher et balayage horizontal
 function endPointer(event) {
-
   if (
     swipePossible &&
     pointers.size === 1 &&
     scale === 1 &&
     swipeStartX !== null
   ) {
-
     const dx = event.clientX - swipeStartX;
     const dy = event.clientY - swipeStartY;
 
@@ -659,7 +656,6 @@ function endPointer(event) {
       Math.abs(dx) > 60 &&
       Math.abs(dx) > Math.abs(dy) * 1.5
     ) {
-
       if (dx < 0 && index < pages.length - 1) {
         index++;
         render();
@@ -667,12 +663,10 @@ function endPointer(event) {
         index--;
         render();
       }
-
     }
   }
 
   pointers.delete(event.pointerId);
-
   swipePossible = false;
   swipeStartX = null;
   swipeStartY = null;
@@ -684,13 +678,11 @@ function endPointer(event) {
     previousDistance = distance(a, b);
     previousCenter = center(a, b);
   }
-
 }
 
 stage.addEventListener("pointerup", endPointer);
 stage.addEventListener("pointercancel", endPointer);
 
-// Démarrage
 loadPages();
 
 </script>
