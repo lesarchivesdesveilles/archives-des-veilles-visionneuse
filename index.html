@@ -219,19 +219,15 @@ button:disabled {
 /* Plein écran */
 const fullscreenButton = document.getElementById("fullscreen");
 
-function updateFullscreenButton() {
-  const isFullscreen = document.fullscreenElement === viewer;
-
-  fullscreenButton.textContent = isFullscreen ? "⊟" : "⛶";
-  fullscreenButton.title = isFullscreen
-    ? "Quitter le plein écran"
-    : "Passer en plein écran";
-
-  fullscreenButton.setAttribute(
-    "aria-label",
-    fullscreenButton.title
-  );
-}
+document.getElementById("fullscreen").onclick = () => {
+  if (document.fullscreenElement) {
+    document.exitFullscreen();
+  } else if (viewer.requestFullscreen) {
+    viewer.requestFullscreen().catch(() => {
+      setStatus("Le plein écran n'est pas autorisé ici.");
+    });
+  }
+};
 
 fullscreenButton.onclick = async () => {
   try {
