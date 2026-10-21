@@ -12,30 +12,51 @@
       font-family: Georgia, serif;
       padding: 24px;
     }
+
     button, input {
       padding: 10px;
       margin: 5px 0;
     }
-    input { width: min(90%, 450px); }
-    #resultat { white-space: pre-wrap; }
+
+    input {
+      width: min(90%, 450px);
+    }
+
+    #resultat {
+      white-space: pre-wrap;
+    }
   </style>
 </head>
 <body>
+
   <h2>✦ Test Google Drive</h2>
+
   <p>Clé API (utilisée uniquement dans cette page) :</p>
-  <input id="cle" type="password"
-         placeholder="Colle ta clé API ici">
+
+  <input
+    id="cle"
+    type="password"
+    placeholder="Colle ta clé API ici"
+  >
+
   <button id="tester">Tester la connexion</button>
+
   <pre id="resultat">En attente du test...</pre>
-  <img id="apercu" alt="Image de synthèse"
-     style="display:none; width:100%; max-width:650px; height:auto; margin-top:20px;">
+
+  <img
+    id="apercu"
+    alt="Image de synthèse"
+    style="display:none; width:100%; max-width:650px; height:auto; margin-top:20px;"
+  >
 
   <script>
     const dossier = "1QioBxBkKRLPrbMLn2xqJhfcbVw_fuhsZ";
 
     document.getElementById("tester").onclick = async () => {
+
       const cle = document.getElementById("cle").value.trim();
       const resultat = document.getElementById("resultat");
+      const apercu = document.getElementById("apercu");
 
       if (!cle) {
         resultat.textContent = "Saisis ta clé API.";
@@ -43,6 +64,7 @@
       }
 
       resultat.textContent = "Connexion en cours...";
+      apercu.style.display = "none";
 
       const params = new URLSearchParams({
         q: "'" + dossier + "' in parents and trashed = false",
@@ -52,6 +74,7 @@
       });
 
       try {
+
         const reponse = await fetch(
           "https://www.googleapis.com/drive/v3/files?" + params
         );
@@ -67,44 +90,53 @@
 
         const fichiers = donnees.files || [];
 
-        const synthese = fichiers.find(f => f.name === "00.png");
-        const apercu = document.getElementById("apercu");
-
-            apercu.style.display = "none";
-
-        if (synthese) {
-        const url = "https://drive.google.com/thumbnail?id=" +
-              encodeURIComponent(synthese.id) + "&sz=w3200";
-
-   apercu.onload = () => {
-    apercu.style.display = "block";
-    resultat.textContent +=
-    "\n\n✅ Image de synthèse affichée !" +
-    "\nRésolution reçue : " +
-    apercu.naturalWidth + " × " +
-    apercu.naturalHeight + " pixels";
-
-    apercu.onerror = () => {
-    resultat.textContent += "\n\n❌ Impossible d'afficher l'image.";
-  };
-
-  apercu.src = url;
-}
+        fichiers.sort((a, b) =>
+          a.name.localeCompare(b.name, "fr", { numeric: true })
+        );
 
         resultat.textContent =
           fichiers.length + " fichier(s) trouvé(s)\n\n" +
           fichiers
-            .sort((a, b) =>
-              a.name.localeCompare(b.name, "fr", { numeric: true })
-            )
             .map(f => f.name + " — " + f.mimeType)
             .join("\n");
+
+        const synthese = fichiers.find(f => f.name === "00.png");
+
+        if (synthese) {
+
+          const url =
+            "https://drive.google.com/thumbnail?id=" +
+            encodeURIComponent(synthese.id) +
+            "&sz=w3200";
+
+          apercu.onload = () => {
+            apercu.style.display = "block";
+
+            resultat.textContent +=
+              "\n\n✅ Image de synthèse affichée !" +
+              "\nRésolution reçue : " +
+              apercu.naturalWidth + " × " +
+              apercu.naturalHeight + " pixels";
+          };
+
+          apercu.onerror = () => {
+            resultat.textContent +=
+              "\n\n❌ Impossible d'afficher l'image.";
+          };
+
+          apercu.src = url;
+
+        } else {
+          resultat.textContent +=
+            "\n\n⚠️ Fichier 00.png introuvable.";
+        }
 
       } catch (erreur) {
         resultat.textContent = "Erreur : " + erreur.message;
       }
+
     };
   </script>
+
 </body>
 </html>
-
