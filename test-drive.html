@@ -27,6 +27,8 @@
          placeholder="Colle ta clé API ici">
   <button id="tester">Tester la connexion</button>
   <pre id="resultat">En attente du test...</pre>
+  <img id="apercu" alt="Image de synthèse"
+     style="display:none; width:100%; max-width:650px; height:auto; margin-top:20px;">
 
   <script>
     const dossier = "1QioBxBkKRLPrbMLn2xqJhfcbVw_fuhsZ";
@@ -64,6 +66,27 @@
         }
 
         const fichiers = donnees.files || [];
+
+        const synthese = fichiers.find(f => f.name === "00.png");
+        const apercu = document.getElementById("apercu");
+
+            apercu.style.display = "none";
+
+        if (synthese) {
+        const url = "https://drive.google.com/thumbnail?id=" +
+              encodeURIComponent(synthese.id) + "&sz=w1600";
+
+    apercu.onload = () => {
+    apercu.style.display = "block";
+    resultat.textContent += "\n\n✅ Image de synthèse affichée !";
+  };
+
+  apercu.onerror = () => {
+    resultat.textContent += "\n\n❌ Impossible d'afficher l'image.";
+  };
+
+  apercu.src = url;
+}
 
         resultat.textContent =
           fichiers.length + " fichier(s) trouvé(s)\n\n" +
