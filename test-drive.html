@@ -1,1 +1,84 @@
 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LADV - Test Google Drive</title>
+  <style>
+    body {
+      background: #171119;
+      color: #f5e5cb;
+      font-family: Georgia, serif;
+      padding: 24px;
+    }
+    button, input {
+      padding: 10px;
+      margin: 5px 0;
+    }
+    input { width: min(90%, 450px); }
+    #resultat { white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h2>✦ Test Google Drive</h2>
+  <p>Clé API (utilisée uniquement dans cette page) :</p>
+  <input id="cle" type="password"
+         placeholder="Colle ta clé API ici">
+  <button id="tester">Tester la connexion</button>
+  <pre id="resultat">En attente du test...</pre>
+
+  <script>
+    const dossier = "1QioBxBkKRLPrbMLn2xqJhfcbVw_fuhsZ";
+
+    document.getElementById("tester").onclick = async () => {
+      const cle = document.getElementById("cle").value.trim();
+      const resultat = document.getElementById("resultat");
+
+      if (!cle) {
+        resultat.textContent = "Saisis ta clé API.";
+        return;
+      }
+
+      resultat.textContent = "Connexion en cours...";
+
+      const params = new URLSearchParams({
+        q: "'" + dossier + "' in parents and trashed = false",
+        fields: "nextPageToken,files(id,name,mimeType)",
+        pageSize: "100",
+        key: cle
+      });
+
+      try {
+        const reponse = await fetch(
+          "https://www.googleapis.com/drive/v3/files?" + params
+        );
+
+        const donnees = await reponse.json();
+
+        if (!reponse.ok) {
+          resultat.textContent =
+            "Erreur " + reponse.status + " : " +
+            (donnees.error?.message || "Erreur inconnue");
+          return;
+        }
+
+        const fichiers = donnees.files || [];
+
+        resultat.textContent =
+          fichiers.length + " fichier(s) trouvé(s)\n\n" +
+          fichiers
+            .sort((a, b) =>
+              a.name.localeCompare(b.name, "fr", { numeric: true })
+            )
+            .map(f => f.name + " — " + f.mimeType)
+            .join("\n");
+
+      } catch (erreur) {
+        resultat.textContent = "Erreur : " + erreur.message;
+      }
+    };
+  </script>
+</body>
+</html>
+
