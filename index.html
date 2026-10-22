@@ -24,6 +24,24 @@ body {
   padding: 14px;
 }
 
+#retour-notion {
+  display: none;
+  width: fit-content;
+  margin: 0 auto 12px;
+  padding: 10px 16px;
+  background: #30222e;
+  color: #e8bb7e;
+  border: 1px solid #94704e;
+  border-radius: 8px;
+  font: 13px Arial, sans-serif;
+  text-decoration: none;
+  text-align: center;
+}
+
+#retour-notion:hover {
+  background: #51384a;
+}
+
 /* Zone de lecture : hauteur adaptée à chaque image */
 .stage {
   aspect-ratio: 2 / 3;
@@ -414,6 +432,12 @@ function buildThumbnails() {
   });
 }
 
+
+const boutonRetour = document.getElementById("retour-notion");
+
+  if (window.self === window.top) {
+    boutonRetour.style.display = "block";
+  }
 async function loadPages() {
 
   if (CLE_API.startsWith("REMPLACER_")) {
