@@ -22,17 +22,26 @@ body {
   padding: 12px 10px 18px;
 }
 
+/* Navigation principale */
 .nav {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 18px;
+  min-height: 44px;
   margin-bottom: 10px;
+}
+
+.nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 18px;
 }
 
 .nav button,
 .close,
-.modal-nav {
+.modal-nav,
+.reset-button {
   background: #30222e;
   color: #e8bb7e;
   border: 1px solid #94704e;
@@ -57,12 +66,40 @@ button:disabled {
   font-size: 14px;
 }
 
+/* Petite croix de retour vers Notion */
+.return-close {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: #30222e;
+  color: #e8bb7e;
+  border: 1px solid #94704e;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 20px;
+  line-height: 1;
+}
+
+/* Petites croix discrètes */
+.return-close,
+.modal-top .close {
+  width: 26px;
+  height: 26px;
+  font-size: 16px;
+  border-radius: 6px;
+  padding: 0;
+}
+  
 .main-image {
   display: block;
-  width: 75%;
-  max-width: 400px;
+  width: 100%;
   height: auto;
-  margin: 0 auto;
   border: 1px solid #70533e;
   border-radius: 9px;
   cursor: zoom-in;
@@ -113,6 +150,7 @@ button:disabled {
   object-fit: contain;
 }
 
+/* Vue agrandie */
 .modal {
   position: fixed;
   inset: 0;
@@ -129,17 +167,41 @@ button:disabled {
 
 .modal-top {
   width: 100%;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
+  gap: 8px;
   padding: 10px 14px;
-  gap: 12px;
 }
 
-.close {
-  width: 44px;
-  height: 44px;
-  font-size: 26px;
+#modalCounter {
+  justify-self: start;
+}
+
+/* Réinitialisation du zoom */
+.reset-button {
+  grid-column: 2;
+  justify-self: center;
+  width: 36px;
+  height: 36px;
+  font-size: 22px;
+  line-height: 1;
+}
+
+/* Petite croix de fermeture */
+.modal-top .close {
+  grid-column: 3;
+  justify-self: end;
+  width: 32px;
+  height: 32px;
+  font-size: 21px;
+  line-height: 1;
+}
+
+.reset-button:hover,
+.return-close:hover,
+.modal-top .close:hover {
+  background: #463344;
 }
 
 .modal-body {
@@ -197,6 +259,12 @@ button:disabled {
   .gallery {
     padding: 16px;
   }
+
+  .main-image {
+    max-width: 540px;
+    margin: auto;
+  }
+
   .thumbs {
     justify-content: center;
   }
@@ -209,9 +277,21 @@ button:disabled {
 <main class="gallery">
 
   <div class="nav">
-    <button id="prev" aria-label="Image précédente">❮</button>
-    <span id="counter" class="counter">— / —</span>
-    <button id="next" aria-label="Image suivante">❯</button>
+    <div class="nav-controls">
+      <button id="prev" type="button"
+        aria-label="Image précédente">❮</button>
+
+      <span id="counter" class="counter">— / —</span>
+
+      <button id="next" type="button"
+        aria-label="Image suivante">❯</button>
+    </div>
+
+    <a id="returnArchive"
+       class="return-close"
+       href="#"
+       aria-label="Retour à l'archive Notion"
+       title="Retour à l'archive">✕</a>
   </div>
 
   <img
@@ -222,14 +302,16 @@ button:disabled {
   >
 
   <p class="hint">
-    Touchez l'image pour l'agrandir · Glissez pour changer de page
+    Touchez l'image pour l'agrandir ·
+    Glissez pour changer de page
   </p>
 
   <p id="loadStatus" class="hint" role="status">
     Chargement des images…
   </p>
 
-  <div id="thumbs" class="thumbs" aria-label="Miniatures"></div>
+  <div id="thumbs" class="thumbs"
+       aria-label="Miniatures"></div>
 
   <div class="footer">
     © 2026 Les Archives des Veilles · Tous droits réservés
@@ -237,6 +319,7 @@ button:disabled {
 
 </main>
 
+<!-- Fenêtre d'agrandissement -->
 <div
   id="modal"
   class="modal"
@@ -248,7 +331,18 @@ button:disabled {
 
   <div class="modal-top">
     <span id="modalCounter">— / —</span>
-    <button id="close" class="close"
+
+    <button
+      id="resetZoomButton"
+      class="reset-button"
+      type="button"
+      title="Réinitialiser le zoom"
+      aria-label="Réinitialiser le zoom">↺</button>
+
+    <button
+      id="close"
+      class="close"
+      type="button"
       aria-label="Fermer la vue agrandie">×</button>
   </div>
 
@@ -262,11 +356,15 @@ button:disabled {
   </div>
 
   <div class="modal-bottom">
-    <button id="modalPrev" class="modal-nav">❮</button>
+    <button id="modalPrev" class="modal-nav"
+      type="button" aria-label="Image précédente">❮</button>
+
     <span class="modal-help">
       Pincez ou utilisez la molette pour zoomer
     </span>
-    <button id="modalNext" class="modal-nav">❯</button>
+
+    <button id="modalNext" class="modal-nav"
+      type="button" aria-label="Image suivante">❯</button>
   </div>
 
 </div>
@@ -274,10 +372,15 @@ button:disabled {
 <script>
 
 // Archive 209 : dossier public Google Drive
-const DOSSIER_DRIVE = "1QioBxBkKRLPrbMLn2xqJhfcbVw_fuhsZ";
+const DOSSIER_DRIVE =
+  "1QioBxBkKRLPrbMLn2xqJhfcbVw_fuhsZ";
 
-// Remettre ici la clé API restreinte de l'ancien index.html
+// Colle ici ta clé API Google Drive restreinte
 const CLE_API = "AIzaSyCHfj7qDdgbXlpfDcWatMa8RwvgLb_EDx4";
+
+// Page Notion de l'archive 209
+const URL_ARCHIVE_NOTION =
+  "https://app.notion.com/p/archivesdesveilles/Le-livre-d-noch-le-secret-des-Veilleurs-3fec24eaac5880dfbbccfd017da9514a";
 
 let pages = [];
 
@@ -310,7 +413,8 @@ async function loadPages() {
       if (token) params.set("pageToken", token);
 
       const response = await fetch(
-        "https://www.googleapis.com/drive/v3/files?" + params
+        "https://www.googleapis.com/drive/v3/files?" +
+        params
       );
 
       const data = await response.json();
@@ -328,7 +432,9 @@ async function loadPages() {
     } while (token);
 
     found.sort((a, b) =>
-      a.name.localeCompare(b.name, "fr", { numeric: true })
+      a.name.localeCompare(
+        b.name, "fr", { numeric: true }
+      )
     );
 
     pages = found.map(file => ({
@@ -350,7 +456,8 @@ async function loadPages() {
 
   } catch (error) {
     setLoadStatus(
-      "Impossible de charger les images : " + error.message
+      "Impossible de charger les images : " +
+      error.message
     );
   }
 }
@@ -388,10 +495,13 @@ function render() {
     $("modalPrev").disabled = index === 0;
 
   $("next").disabled =
-    $("modalNext").disabled = index === pages.length - 1;
+    $("modalNext").disabled =
+      index === pages.length - 1;
 
   thumbs.forEach((t, i) => {
-    t.setAttribute("aria-current", String(i === index));
+    t.setAttribute(
+      "aria-current", String(i === index)
+    );
   });
 
   resetZoom();
@@ -446,6 +556,7 @@ function openModal() {
   modal.classList.add("open");
   modal.setAttribute("aria-hidden", "false");
   document.body.style.overflow = "hidden";
+
   resetZoom();
   $("close").focus();
 }
@@ -454,6 +565,7 @@ function closeModal() {
   modal.classList.remove("open");
   modal.setAttribute("aria-hidden", "true");
   document.body.style.overflow = "";
+
   resetZoom();
 }
 
@@ -486,8 +598,11 @@ $("mainImage").addEventListener("touchstart", e => {
 $("mainImage").addEventListener("touchend", e => {
   if (!start || !e.changedTouches.length) return;
 
-  const dx = e.changedTouches[0].clientX - start.x;
-  const dy = e.changedTouches[0].clientY - start.y;
+  const dx =
+    e.changedTouches[0].clientX - start.x;
+
+  const dy =
+    e.changedTouches[0].clientY - start.y;
 
   if (Math.abs(dx) > 55 &&
       Math.abs(dx) > Math.abs(dy) * 1.4) {
@@ -522,7 +637,10 @@ function resetZoom() {
 }
 
 function zoom(factor) {
-  scale = Math.max(1, Math.min(5, scale * factor));
+  scale = Math.max(
+    1,
+    Math.min(5, scale * factor)
+  );
 
   if (scale === 1) {
     tx = 0;
@@ -534,17 +652,25 @@ function zoom(factor) {
 
 body.addEventListener("wheel", e => {
   e.preventDefault();
-  zoom(e.deltaY < 0 ? 1.2 : 1 / 1.2);
+
+  zoom(
+    e.deltaY < 0 ? 1.2 : 1 / 1.2
+  );
 }, { passive: false });
 
+// Zoom tactile et déplacement
 const pointers = new Map();
+
 let prevDist = null;
 let prevMid = null;
 let swipeX = null;
 let swipeY = null;
 
 function dist(a, b) {
-  return Math.hypot(a.x - b.x, a.y - b.y);
+  return Math.hypot(
+    a.x - b.x,
+    a.y - b.y
+  );
 }
 
 function mid(a, b) {
@@ -639,6 +765,16 @@ function pointerEnd(e) {
 body.addEventListener("pointerup", pointerEnd);
 body.addEventListener("pointercancel", pointerEnd);
 
+// Retour vers Notion
+$("returnArchive").href = URL_ARCHIVE_NOTION;
+
+// Bouton de réinitialisation du zoom
+$("resetZoomButton").addEventListener(
+  "click",
+  resetZoom
+);
+
+// Chargement des illustrations
 loadPages();
 
 </script>
