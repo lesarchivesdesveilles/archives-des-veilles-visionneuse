@@ -1,1 +1,596 @@
 
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Test galerie — Les Archives des Veilles</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #171119;
+  color: #f5e5cb;
+  font-family: Arial, sans-serif;
+}
+
+.gallery {
+  max-width: 760px;
+  margin: auto;
+  padding: 12px 10px 18px;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-bottom: 10px;
+}
+
+.nav button,
+.close,
+.modal-nav {
+  background: #30222e;
+  color: #e8bb7e;
+  border: 1px solid #94704e;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.nav button {
+  width: 44px;
+  height: 42px;
+  font-size: 22px;
+}
+
+button:disabled {
+  opacity: .35;
+  cursor: default;
+}
+
+.counter {
+  min-width: 62px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.main-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid #70533e;
+  border-radius: 9px;
+  cursor: zoom-in;
+  user-select: none;
+  -webkit-user-drag: none;
+  touch-action: pan-y;
+}
+
+.hint {
+  text-align: center;
+  color: #b59b86;
+  font-size: 12px;
+  margin: 8px 0;
+}
+
+.thumbs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px 2px;
+  scrollbar-width: thin;
+}
+
+.thumb {
+  flex: none;
+  width: 56px;
+  height: 78px;
+  padding: 2px;
+  border: 1px solid #70533e;
+  border-radius: 6px;
+  background: #241a25;
+  opacity: .65;
+  cursor: pointer;
+}
+
+.thumb[aria-current="true"] {
+  border: 2px solid #e8bb7e;
+  opacity: 1;
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(7,5,9,.97);
+  z-index: 1000;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal.open {
+  display: flex;
+}
+
+.modal-top {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  gap: 12px;
+}
+
+.close {
+  width: 44px;
+  height: 44px;
+  font-size: 26px;
+}
+
+.modal-body {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+  cursor: grab;
+}
+
+.modal-body:active {
+  cursor: grabbing;
+}
+
+.modal-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transform-origin: center;
+  user-select: none;
+  pointer-events: none;
+}
+
+.modal-bottom {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 12px 16px;
+}
+
+.modal-nav {
+  width: 45px;
+  height: 40px;
+  font-size: 22px;
+}
+
+.modal-help {
+  font-size: 12px;
+  color: #b59b86;
+}
+
+.footer {
+  text-align: center;
+  color: #a68b77;
+  font-size: 11px;
+  margin-top: 14px;
+}
+
+@media (min-width: 700px) {
+  .gallery {
+    padding: 16px;
+  }
+
+  .main-image {
+    max-width: 540px;
+    margin: auto;
+  }
+
+  .thumbs {
+    justify-content: center;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<main class="gallery">
+
+  <div class="nav">
+    <button id="prev" aria-label="Image précédente">❮</button>
+    <span id="counter" class="counter">1 / 3</span>
+    <button id="next" aria-label="Image suivante">❯</button>
+  </div>
+
+  <img
+    id="mainImage"
+    class="main-image"
+    alt="Image de démonstration"
+    draggable="false"
+  >
+
+  <p class="hint">
+    Touchez l'image pour l'agrandir · Glissez pour changer de page
+  </p>
+
+  <div id="thumbs" class="thumbs" aria-label="Miniatures"></div>
+
+  <div class="footer">
+    Prototype de galerie · Les Archives des Veilles
+  </div>
+
+</main>
+
+<div
+  id="modal"
+  class="modal"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Image agrandie"
+  aria-hidden="true"
+>
+
+  <div class="modal-top">
+    <span id="modalCounter">1 / 3</span>
+    <button id="close" class="close"
+      aria-label="Fermer la vue agrandie">×</button>
+  </div>
+
+  <div id="modalBody" class="modal-body">
+    <img
+      id="modalImage"
+      class="modal-image"
+      alt="Image agrandie"
+      draggable="false"
+    >
+  </div>
+
+  <div class="modal-bottom">
+    <button id="modalPrev" class="modal-nav">❮</button>
+    <span class="modal-help">Pincez ou utilisez la molette pour zoomer</span>
+    <button id="modalNext" class="modal-nav">❯</button>
+  </div>
+
+</div>
+
+<script>
+
+// Images de démonstration intégrées
+function sample(label, w, h, accent) {
+  const svg = `
+  <svg xmlns="http://www.w3.org/2000/svg"
+       width="${w}" height="${h}"
+       viewBox="0 0 ${w} ${h}">
+    <defs>
+      <linearGradient id="g" x2="1" y2="1">
+        <stop stop-color="#170f20"/>
+        <stop offset="1" stop-color="#50304c"/>
+      </linearGradient>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#g)"/>
+    <rect x="30" y="30"
+      width="${w-60}" height="${h-60}"
+      rx="12" fill="none"
+      stroke="#d3a56b" stroke-width="3"/>
+    <circle cx="${w/2}" cy="${h*.38}"
+      r="${w*.24}" fill="none"
+      stroke="${accent}" stroke-width="4"/>
+    <text x="50%" y="${h*.68}"
+      text-anchor="middle" font-family="Georgia"
+      font-size="${w*.07}" fill="#f3d4a3">
+      Les Archives
+    </text>
+    <text x="50%" y="${h*.75}"
+      text-anchor="middle" font-family="Georgia"
+      font-size="${w*.07}" fill="#f3d4a3">
+      des Veilles
+    </text>
+    <text x="50%" y="${h*.83}"
+      text-anchor="middle" font-family="Arial"
+      font-size="${w*.04}" fill="#e8bb7e">
+      ${label}
+    </text>
+  </svg>`;
+
+  return "data:image/svg+xml;charset=utf-8," +
+    encodeURIComponent(svg);
+}
+
+const pages = [
+  {
+    name: "Synthèse · 2:3",
+    src: sample("SYNTHÈSE · 2:3", 600, 900, "#d7a76d")
+  },
+  {
+    name: "Planche 1 · 9:16",
+    src: sample("PLANCHE 1 · 9:16", 540, 960, "#dfbb87")
+  },
+  {
+    name: "Planche 2 · 2:3",
+    src: sample("PLANCHE 2 · 2:3", 600, 900, "#bba0d6")
+  }
+];
+
+let index = 0;
+let scale = 1;
+let tx = 0;
+let ty = 0;
+
+const $ = id => document.getElementById(id);
+const modal = $("modal");
+const body = $("modalBody");
+const mimg = $("modalImage");
+
+let thumbs = [];
+
+function render() {
+  const p = pages[index];
+
+  $("mainImage").src = p.src;
+  $("mainImage").alt = p.name;
+
+  $("counter").textContent =
+    `${index + 1} / ${pages.length}`;
+
+  $("modalCounter").textContent =
+    `${index + 1} / ${pages.length}`;
+
+  mimg.src = p.src;
+  mimg.alt = p.name;
+
+  $("prev").disabled =
+    $("modalPrev").disabled = index === 0;
+
+  $("next").disabled =
+    $("modalNext").disabled = index === pages.length - 1;
+
+  thumbs.forEach((t, i) => {
+    t.setAttribute("aria-current", String(i === index));
+  });
+
+  resetZoom();
+}
+
+function go(n) {
+  index = Math.max(
+    0,
+    Math.min(pages.length - 1, index + n)
+  );
+  render();
+}
+
+pages.forEach((p, i) => {
+  const b = document.createElement("button");
+  b.className = "thumb";
+  b.type = "button";
+  b.setAttribute("aria-label", p.name);
+
+  const im = document.createElement("img");
+  im.src = p.src;
+  im.alt = "";
+
+  b.append(im);
+
+  b.onclick = () => {
+    index = i;
+    render();
+  };
+
+  $("thumbs").append(b);
+  thumbs.push(b);
+});
+
+$("prev").onclick = () => go(-1);
+$("next").onclick = () => go(1);
+$("modalPrev").onclick = () => go(-1);
+$("modalNext").onclick = () => go(1);
+
+function openModal() {
+  modal.classList.add("open");
+  modal.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+  resetZoom();
+  $("close").focus();
+}
+
+function closeModal() {
+  modal.classList.remove("open");
+  modal.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+  resetZoom();
+}
+
+$("mainImage").onclick = openModal;
+$("close").onclick = closeModal;
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && modal.classList.contains("open")) {
+    closeModal();
+  }
+
+  if (e.key === "ArrowLeft") go(-1);
+  if (e.key === "ArrowRight") go(1);
+});
+
+// Glissement sur l'image principale
+let start = null;
+let suppressClick = false;
+
+$("mainImage").addEventListener("touchstart", e => {
+  if (e.touches.length === 1) {
+    start = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY
+    };
+  }
+}, { passive: true });
+
+$("mainImage").addEventListener("touchend", e => {
+  if (!start || !e.changedTouches.length) return;
+
+  const dx = e.changedTouches[0].clientX - start.x;
+  const dy = e.changedTouches[0].clientY - start.y;
+
+  if (Math.abs(dx) > 55 &&
+      Math.abs(dx) > Math.abs(dy) * 1.4) {
+    go(dx < 0 ? 1 : -1);
+    suppressClick = true;
+    setTimeout(() => suppressClick = false, 300);
+  }
+
+  start = null;
+}, { passive: true });
+
+$("mainImage").addEventListener("click", e => {
+  if (suppressClick) {
+    e.stopImmediatePropagation();
+  }
+}, true);
+
+// Zoom dans la fenêtre agrandie
+function transform() {
+  mimg.style.transform =
+    `translate(${tx}px, ${ty}px) scale(${scale})`;
+}
+
+function resetZoom() {
+  scale = 1;
+  tx = 0;
+  ty = 0;
+  transform();
+}
+
+function zoom(factor) {
+  scale = Math.max(1, Math.min(5, scale * factor));
+
+  if (scale === 1) {
+    tx = 0;
+    ty = 0;
+  }
+
+  transform();
+}
+
+body.addEventListener("wheel", e => {
+  e.preventDefault();
+  zoom(e.deltaY < 0 ? 1.2 : 1 / 1.2);
+}, { passive: false });
+
+const pointers = new Map();
+let prevDist = null;
+let prevMid = null;
+let swipeX = null;
+let swipeY = null;
+
+function dist(a, b) {
+  return Math.hypot(a.x - b.x, a.y - b.y);
+}
+
+function mid(a, b) {
+  return {
+    x: (a.x + b.x) / 2,
+    y: (a.y + b.y) / 2
+  };
+}
+
+body.addEventListener("pointerdown", e => {
+  body.setPointerCapture(e.pointerId);
+
+  pointers.set(e.pointerId, {
+    x: e.clientX,
+    y: e.clientY
+  });
+
+  if (pointers.size === 1) {
+    swipeX = e.clientX;
+    swipeY = e.clientY;
+  }
+
+  if (pointers.size === 2) {
+    const [a, b] = [...pointers.values()];
+    prevDist = dist(a, b);
+    prevMid = mid(a, b);
+  }
+});
+
+body.addEventListener("pointermove", e => {
+  if (!pointers.has(e.pointerId)) return;
+
+  const old = pointers.get(e.pointerId);
+
+  pointers.set(e.pointerId, {
+    x: e.clientX,
+    y: e.clientY
+  });
+
+  if (pointers.size === 1 && scale > 1) {
+    tx += e.clientX - old.x;
+    ty += e.clientY - old.y;
+    transform();
+  } else if (pointers.size === 2) {
+    const [a, b] = [...pointers.values()];
+    const d = dist(a, b);
+    const m = mid(a, b);
+
+    if (prevDist) {
+      scale = Math.max(
+        1,
+        Math.min(5, scale * d / prevDist)
+      );
+    }
+
+    if (prevMid) {
+      tx += m.x - prevMid.x;
+      ty += m.y - prevMid.y;
+    }
+
+    prevDist = d;
+    prevMid = m;
+    transform();
+  }
+});
+
+function pointerEnd(e) {
+  if (pointers.size === 1 &&
+      scale === 1 &&
+      swipeX !== null) {
+    const dx = e.clientX - swipeX;
+    const dy = e.clientY - swipeY;
+
+    if (Math.abs(dx) > 60 &&
+        Math.abs(dx) > Math.abs(dy) * 1.4) {
+      go(dx < 0 ? 1 : -1);
+    }
+  }
+
+  pointers.delete(e.pointerId);
+
+  if (!pointers.size) {
+    prevDist = null;
+    prevMid = null;
+    swipeX = null;
+    swipeY = null;
+  }
+}
+
+body.addEventListener("pointerup", pointerEnd);
+body.addEventListener("pointercancel", pointerEnd);
+
+render();
+
+</script>
+</body>
+</html>
+
