@@ -104,8 +104,8 @@ button:disabled {
 }
 
 .modal-top .close:focus-visible {
-  outline: 2px solid #e8bb7e;
-  outline-offset: 2px;
+  outline: 1px solid #e8bb7e;
+  outline-offset: 1px;
 }
 
 .main-image {
@@ -200,14 +200,21 @@ button:disabled {
   line-height: 1;
 }
 
-/* Petite croix de fermeture */
+/* Croix identique à celle de la galerie */
 .modal-top .close {
   grid-column: 3;
   justify-self: end;
-  width: 32px;
-  height: 32px;
-  font-size: 21px;
+  width: 26px;
+  height: 26px;
+  font-size: 16px;
   line-height: 1;
+  padding: 0;
+  border: 1px solid #94704e;
+  border-radius: 6px;
+  background: #30222e;
+  color: #e8bb7e;
+  outline: none;
+  box-shadow: none;
 }
 
 .reset-button:hover,
@@ -570,7 +577,7 @@ function openModal() {
   document.body.style.overflow = "hidden";
 
   resetZoom();
-  $("close").focus();
+  $("close").focus({ preventScroll: true });
 }
 
 function closeModal() {
