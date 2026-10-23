@@ -415,16 +415,43 @@ a.return-close:hover {
 
 <script>
 
-// Archive 209 : dossier public Google Drive
-const DOSSIER_DRIVE =
-  "1QioBxBkKRLPrbMLn2xqJhfcbVw_fuhsZ";
-
-// Colle ici ta clé API Google Drive restreinte
+// Clé API Google Drive : conserver ta clé actuelle
 const CLE_API = "AIzaSyCHfj7qDdgbXlpfDcWatMa8RwvgLb_EDx4";
 
-// Page Notion de l'archive 209
-const URL_ARCHIVE_NOTION =
-  "https://archivesdesveilles.notion.site/3fec24eaac5880dfbbccfd017da9514a";
+// Archive demandée dans l'adresse
+const parametres = new URLSearchParams(window.location.search);
+const numeroArchive = parametres.get("archive") || "209";
+
+// Informations chargées depuis archives.json
+let DOSSIER_DRIVE = "";
+let URL_ARCHIVE_NOTION = "";
+
+async function chargerArchive() {
+  try {
+    const reponse = await fetch("./archives.json");
+
+    if (!reponse.ok) {
+      throw new Error("Impossible de charger archives.json");
+    }
+
+    const archives = await reponse.json();
+    const archive = archives[numeroArchive];
+
+    if (!archive) {
+      throw new Error("Archive " + numeroArchive + " introuvable");
+    }
+
+    DOSSIER_DRIVE = archive.dossier;
+    URL_ARCHIVE_NOTION = archive.notion;
+
+    $("returnArchive").href = URL_ARCHIVE_NOTION;
+
+    await loadPages();
+
+  } catch (erreur) {
+    setLoadStatus(erreur.message);
+  }
+}
 
 let pages = [];
 
