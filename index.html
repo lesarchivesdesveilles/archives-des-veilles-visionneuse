@@ -444,8 +444,6 @@ async function chargerArchive() {
     DOSSIER_DRIVE = archive.dossier;
     URL_ARCHIVE_NOTION = archive.notion;
 
-    $("returnArchive").href = URL_ARCHIVE_NOTION;
-
     await loadPages();
 
   } catch (erreur) {
@@ -846,7 +844,7 @@ $("resetZoomButton").addEventListener(
 );
 
 // Chargement des illustrations
-loadPages();
+chargerArchive();
 
 </script>
 </body>
