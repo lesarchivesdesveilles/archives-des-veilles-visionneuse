@@ -441,10 +441,13 @@ async function chargerArchive() {
       throw new Error("Archive " + numeroArchive + " introuvable");
     }
 
-    DOSSIER_DRIVE = archive.dossier;
-    URL_ARCHIVE_NOTION = archive.notion;
+  DOSSIER_DRIVE = archive.dossier;
+  URL_ARCHIVE_NOTION = archive.notion;
 
-    await loadPages();
+  // Lien de retour vers la bonne page Notion
+  $("returnArchive").href = URL_ARCHIVE_NOTION;
+  
+  await loadPages();
 
   } catch (erreur) {
     setLoadStatus(erreur.message);
@@ -833,9 +836,6 @@ function pointerEnd(e) {
 
 body.addEventListener("pointerup", pointerEnd);
 body.addEventListener("pointercancel", pointerEnd);
-
-// Retour vers Notion
-$("returnArchive").href = URL_ARCHIVE_NOTION;
 
 // Bouton de réinitialisation du zoom
 $("resetZoomButton").addEventListener(
