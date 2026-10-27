@@ -66,7 +66,7 @@ button:disabled {
   font-size: 14p;
 }
 
-/* Petite croi de retour vers Notion */
+/* Petite croix de retour */
 .return-close {
   position: absolute;
   right: 0;
@@ -289,7 +289,7 @@ button:disabled {
   }
 }
 
-/* Croix de retour vers Notion */
+/* Croix de retour */
 a.return-close,
 a.return-close:visited {
   display: flex;
@@ -424,7 +424,6 @@ const numeroArchive = parametres.get("archive") || "209";
 
 // Informations chargées depuis archives.json
 let DOSSIER_DRIVE = "";
-let URL_ARCHIVE_NOTION = "";
 
 async function chargerArchive() {
   try {
@@ -442,10 +441,10 @@ async function chargerArchive() {
     }
 
   DOSSIER_DRIVE = archive.dossier;
-  URL_ARCHIVE_NOTION = archive.notion;
-
-  // Lien de retour vers la bonne page Notion
-  $("returnArchive").href = URL_ARCHIVE_NOTION;
+    
+  // Retour vers la fiche de l'archive sur GitHub
+  $("returnArchive").href =
+  `https://lesarchivesdesveilles.github.io/archive.html?archive=${numeroArchive}`;
   
   await loadPages();
 
