@@ -50,9 +50,9 @@ body {
 }
 
 .nav button {
-  width: 44p;
-  height: 42p;
-  font-size: 22p;
+  width: 44px;
+  height: 42px;
+  font-size: 22px;
 }
 
 button:disabled {
@@ -61,9 +61,9 @@ button:disabled {
 }
 
 .counter {
-  min-width: 62p;
-  tet-align: center;
-  font-size: 14p;
+  min-width: 62px;
+  text-align: center;
+  font-size: 14px;
 }
 
 /* Petite croix de retour */
@@ -72,48 +72,48 @@ button:disabled {
   right: 0;
   top: 50%;
   transform: translateY(-50%);
-  display: fle;
+  display: flex;
   align-items: center;
   justify-content: center;
-  width: 32p;
-  height: 32p;
+  width: 32px;
+  height: 32px;
   background: #30222e;
   color: #e8bb7e;
-  border: 1p solid #94704e;
-  border-radius: 8p;
-  tet-decoration: none;
-  font-size: 20p;
+  border: 1px solid #94704e;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 20px;
   line-height: 1;
 }
 
 /* Petites croix discrètes */
 .return-close,
 .modal-top .close {
-  width: 26p;
-  height: 26p;
-  font-size: 16p;
-  border-radius: 6p;
+  width: 26px;
+  height: 26px;
+  font-size: 16px;
+  border-radius: 6px;
   padding: 0;
 }
 
 /* Contour harmonisé de la croi */
 .modal-top .close {
-  border: 1p solid #94704e;
+  border: 1px solid #94704e;
   outline: none;
-  bo-shadow: none;
+  box-shadow: none;
 }
 
 .modal-top .close:focus-visible {
-  outline: 1p solid #e8bb7e;
-  outline-offset: 1p;
+  outline: 1px solid #e8bb7e;
+  outline-offset: 1px;
 }
 
 .main-image {
   display: block;
   width: 100%;
   height: auto;
-  border: 1p solid #70533e;
-  border-radius: 9p;
+  border: 1px solid #70533e;
+  border-radius: 9px;
   cursor: zoom-in;
   user-select: none;
   -webkit-user-drag: none;
@@ -121,7 +121,7 @@ button:disabled {
 }
 
 .hint {
-  tet-align: center;
+  text-align: center;
   color: #b59b86;
   font-size: 12px;
   margin: 8px 0;
@@ -331,6 +331,10 @@ a.return-close:visited {
 a.return-close:hover {
   background: #463344;
 }
+/* Alignement et croix rondes */
+.hint { text-align: center; width: 100%; }
+a.return-close, a.return-close:visited,
+.modal-top .close { width: 30px; height: 30px; min-width: 30px; border-radius: 50%; }
 </style>
 </head>
 
