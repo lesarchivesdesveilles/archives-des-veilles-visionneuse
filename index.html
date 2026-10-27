@@ -96,13 +96,29 @@ button:disabled {
   padding: 0;
 }
 
-/* Contour harmonisé de la croi */
+/* Contour harmonisé de la croix */
 .modal-top .close {
   border: 1px solid #94704e;
   outline: none;
   box-shadow: none;
 }
 
+/* Boutons de navigation plus discrets */
+.nav-controls button {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+/* Rapprocher les boutons du compteur */
+.nav-controls {
+  gap: 14px;
+}
 .modal-top .close:focus-visible {
   outline: 1px solid #e8bb7e;
   outline-offset: 1px;
