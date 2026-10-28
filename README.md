@@ -47,4 +47,4 @@ Les contenus rapportent des perceptions et des hypothèses issues des exploratio
 
 ---
 
-© 2026 Les Archives des Veilles — Tous droits réservés.
+© 2026 Les Archives des Veilles.
