@@ -461,7 +461,7 @@ async function loadPages() {
   const params = new URLSearchParams({
     q: "'" + DOSSIER_DRIVE +
        "' in parents and trashed = false " +
-       "and mimeType = 'image/png'",
+       "and (mimeType = 'image/png' or mimeType = 'image/webp')",
     fields: "nextPageToken,files(id,name,mimeType)",
     pageSize: "100",
     key: CLE_API
