@@ -66,36 +66,6 @@ button:disabled {
   font-size: 14px;
 }
 
-/* Petite croix de retour */
-.return-close {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  background: #30222e;
-  color: #e8bb7e;
-  border: 1px solid #94704e;
-  border-radius: 8px;
-  text-decoration: none;
-  font-size: 20px;
-  line-height: 1;
-}
-
-/* Petites croix discrètes */
-.return-close,
-.modal-top .close {
-  width: 26px;
-  height: 26px;
-  font-size: 16px;
-  border-radius: 6px;
-  padding: 0;
-}
-
 /* Contour harmonisé de la croix */
 .modal-top .close {
   border: 1px solid #94704e;
@@ -139,6 +109,7 @@ button:disabled {
 .hint {
   text-align: center;
   color: #b59b86;
+  width: 100%;
   font-size: 12px;
   margin: 8px 0;
 }
@@ -216,23 +187,6 @@ button:disabled {
   line-height: 1;
 }
 
-/* Croix identique à celle de la galerie */
-.modal-top .close {
-  grid-column: 3;
-  justify-self: end;
-  width: 26px;
-  height: 26px;
-  font-size: 16px;
-  line-height: 1;
-  padding: 0;
-  border: 1px solid #94704e;
-  border-radius: 6px;
-  background: #30222e;
-  color: #e8bb7e;
-  outline: none;
-  box-shadow: none;
-}
-
 /* Croix rondes de la visionneuse */
 .return-close,
 .modal-top .close {
@@ -249,6 +203,11 @@ button:disabled {
   background: #30222e;
   color: #e8bb7e;
   border: 1px solid #94704e;
+}
+
+.modal-top .close {
+  grid-column: 3;
+  justify-self: end;
 }
 
 .reset-button:hover,
@@ -329,17 +288,14 @@ a.return-close:visited {
   display: flex;
   align-items: center;
   justify-content: center;
-
-  width: 26px;
-  height: 26px;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
   padding: 0;
-
   background: #30222e;
   color: #e8bb7e;
   border: 1px solid #94704e;
-  border-radius: 6px;
-
-  font-size: 16px;
   line-height: 1;
   text-decoration: none;
 }
@@ -347,10 +303,7 @@ a.return-close:visited {
 a.return-close:hover {
   background: #463344;
 }
-/* Alignement et croix rondes */
-.hint { text-align: center; width: 100%; }
-a.return-close, a.return-close:visited,
-.modal-top .close { width: 30px; height: 30px; min-width: 30px; border-radius: 50%; }
+
 </style>
 </head>
 
@@ -396,7 +349,7 @@ a.return-close, a.return-close:visited,
        aria-label="Miniatures"></div>
 
   <div class="footer">
-    © 2026 Les Archives des Veilles · Tous droits réservés
+    © 2026 Les Archives des Veilles
   </div>
 
 </main>
