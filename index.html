@@ -276,10 +276,6 @@ button:disabled {
     max-width: 540px;
     margin: auto;
   }
-
-  .thumbs {
-    justify-content: center;
-  }
 }
 
 /* Croix de retour */
@@ -493,13 +489,13 @@ async function loadPages() {
 
     } while (token);
 
-    found.sort((a, b) =>
-      a.name.localeCompare(
-        b.name, "fr", { numeric: true }
-      )
-    );
-
-    pages = found.map(file => ({
+    const planches = found
+      .filter(file => /^\d{2}\.(png|webp)$/i.test(file.name))
+      .sort((a, b) =>
+        a.name.localeCompare(b.name, "fr", { numeric: true })
+      );
+    
+    pages = planches.map(file => ({
       name: file.name,
       src: imageUrl(file.id),
       thumbnail: imageUrl(file.id, 150)
@@ -507,7 +503,7 @@ async function loadPages() {
 
     if (!pages.length) {
       setLoadStatus(
-        "Aucune image PNG trouvée dans le dossier Publication."
+        "Aucune planche numérotée PNG ou WebP trouvée dans le dossier Publication."
       );
       return;
     }
