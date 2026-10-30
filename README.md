@@ -6,7 +6,7 @@ Visionneuse interactive développée pour accompagner la bibliothèque numériqu
 
 Cette application permet de consulter les infographies des Archives des Veilles dans un environnement de lecture immersif, adapté aux ordinateurs, tablettes et smartphones.
 
-Elle est reliée à la bibliothèque numérique hébergée sur **GitHub Pages**, où chaque exploration dispose de sa propre fiche documentaire.
+Elle est reliée à la bibliothèque numérique accessible à l'adresse **https://lesarchivesdesveilles.fr/**, où chaque exploration dispose de sa propre fiche documentaire.
 
 ## ✧ Fonctionnalités
 
@@ -25,19 +25,31 @@ Elle est reliée à la bibliothèque numérique hébergée sur **GitHub Pages**,
 
 Chaque exploration est identifiée par un numéro d'archive.
 
-Le fichier `archives.json` associe ce numéro au dossier de publication correspondant sur Google Drive.
+Le fichier `archives.json` associe ce numéro au dossier `Publication` correspondant sur Google Drive.
 
-La visionneuse affiche ainsi les infographies de l'exploration sélectionnée, sans nécessiter la création d'une nouvelle page HTML pour chaque archive.
+La visionneuse récupère les planches numérotées, les classe dans leur ordre de lecture et les affiche sans nécessiter la création d'une nouvelle page HTML pour chaque exploration.
+
+Les archives composées d'une seule infographie de synthèse sont présentées directement sur leur fiche documentaire dans la bibliothèque principale.
+
+## ✧ Publication des archives
+
+Un assistant local développé en **Python**, avec Tkinter et Pillow, facilite la préparation des nouvelles publications.
+
+Il assure notamment la conversion des illustrations au format WebP et la génération du fragment JSON nécessaire pour référencer chaque nouveau dossier Google Drive.
+
+Les fichiers sont ensuite ajoutés manuellement à la visionneuse et à Google Drive.
 
 ## ✧ Technologies
 
-**HTML · CSS · JavaScript · GitHub Pages · Google Drive API**
+**HTML5 · CSS3 · JavaScript · JSON · GitHub Pages · Google Drive API**
+
+L'assistant de publication utilise également **Python · Tkinter · Pillow**.
 
 ## ✧ Évolutions envisagées
 
 - Amélioration progressive du confort de lecture.
-- Simplification de l'ajout de nouvelles explorations.
-- Automatisation de certaines étapes de publication.
+- Enrichissement de la bibliothèque et de ses explorations.
+- Simplification des opérations de publication et de maintenance.
 
 ## ✧ Les Archives des Veilles
 
